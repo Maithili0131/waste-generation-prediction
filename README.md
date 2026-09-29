@@ -1,35 +1,50 @@
 # ♻️ Waste Generation Prediction System
 
-## 📌 Overview
+An ML-based waste generation prediction system that forecasts daily municipal waste generation using historical waste collection data and provides an estimated number of collection trips required.
 
-The **Waste Generation Prediction System** is a machine learning-based project that predicts daily waste generation using historical waste collection data.
+The project uses **Machine Learning with Random Forest Regression** and provides an interactive **Streamlit web application** for making predictions.
 
-The system uses historical waste patterns, previous-day waste, previous 7-day average waste, day of the week, month, and day of the month as input features.
+---
 
-A **Random Forest Regression** model is used to predict future waste generation. The project also includes a **Streamlit web application** where users can select a prediction date and enter truck capacity to estimate the number of collection trips required.
+## 🚀 Project Overview
+
+Efficient waste collection requires better estimation of how much waste will be generated.
+
+This project analyzes historical waste collection data and predicts future waste generation based on:
+
+* Day of the week
+* Month
+* Day of the month
+* Previous day's waste
+* Previous 7-day average waste
+
+The system can also estimate the number of collection trips required based on the predicted waste quantity and truck capacity.
 
 ---
 
 ## 🎯 Objectives
 
-* Predict future daily waste generation using historical data.
-* Analyze patterns in waste generation.
-* Compare different machine learning regression models.
-* Use Random Forest Regression for waste prediction.
-* Estimate the number of collection trips required based on truck capacity.
-* Provide an easy-to-use web interface using Streamlit.
+* Predict daily waste generation using Machine Learning.
+* Compare multiple regression algorithms.
+* Identify important factors affecting waste generation.
+* Provide an interactive prediction interface.
+* Estimate the number of waste collection trips required.
+* Support data-driven waste collection planning.
 
 ---
 
 ## 🛠️ Technologies Used
 
-* **Python**
-* **Pandas** – Data loading and preprocessing
-* **NumPy** – Numerical calculations
-* **Scikit-learn** – Machine learning models and evaluation
-* **Random Forest Regression** – Main prediction model
-* **Streamlit** – Web-based dashboard
-* **Matplotlib / Streamlit Charts** – Data visualization
+| Technology    | Purpose              |
+| ------------- | -------------------- |
+| Python        | Programming language |
+| Pandas        | Data processing      |
+| NumPy         | Numerical operations |
+| Scikit-learn  | Machine Learning     |
+| Random Forest | Waste prediction     |
+| Matplotlib    | Data visualization   |
+| Streamlit     | Web application      |
+| Git & GitHub  | Version control      |
 
 ---
 
@@ -40,6 +55,11 @@ Waste_Prediction_Project/
 │
 ├── data/
 │   └── austin_waste.csv
+│
+├── Screenshots/
+│   ├── main_dashboard.png
+│   ├── prediction_result.png
+│   └── waste_graph.png
 │
 ├── app.py
 ├── load_dataset.py
@@ -54,69 +74,76 @@ Waste_Prediction_Project/
 
 ## 📊 Dataset
 
-The project uses historical municipal waste collection data.
+The project uses historical municipal waste collection data containing information about waste collection activities.
 
-The dataset contains waste collection records with information including the **Report Date** and **Load Weight**.
+The dataset is processed by:
 
-The individual collection records are aggregated by date to calculate the total waste generated each day.
-
-### Data Processing
-
-The dataset goes through the following preprocessing steps:
-
-1. Load the CSV dataset.
-2. Convert `Report Date` into datetime format.
-3. Remove records with missing `Load Weight`.
-4. Group waste collection records by date.
-5. Calculate total daily waste.
-6. Sort the data chronologically.
+1. Converting dates into a standard datetime format.
+2. Removing records with missing waste quantities.
+3. Aggregating waste generation by date.
+4. Creating time-based and historical features.
+5. Preparing the data for regression models.
 
 ---
 
-## 🔧 Feature Engineering
+## 🧠 Feature Engineering
 
-The following features are created for prediction:
+The following features are used for prediction:
 
-| Feature              | Description                                      |
-| -------------------- | ------------------------------------------------ |
-| `Day_of_Week`        | Day of the week represented numerically          |
-| `Month`              | Month of the prediction date                     |
-| `Day`                | Day of the month                                 |
-| `Previous_Day_Waste` | Waste generated on the previous available day    |
-| `Previous_7_Day_Avg` | Average waste from the previous 7 available days |
+| Feature              | Description                                        |
+| -------------------- | -------------------------------------------------- |
+| `Day_of_Week`        | Day of the week                                    |
+| `Month`              | Month of the year                                  |
+| `Day`                | Day of the month                                   |
+| `Previous_Day_Waste` | Waste generated on the previous day                |
+| `Previous_7_Day_Avg` | Average waste generated during the previous 7 days |
 
-### Target Variable
-
-```text
-Total_Waste
-```
-
-The model predicts the total waste generated for a particular day.
+Feature engineering helps the model capture both **calendar patterns** and **recent waste-generation trends**.
 
 ---
 
 ## 🤖 Machine Learning Models
 
-The project compares three regression models:
+Three regression models were compared:
 
-1. Linear Regression
-2. Decision Tree Regressor
-3. Random Forest Regressor
+* Linear Regression
+* Decision Tree Regressor
+* Random Forest Regressor
 
-The data is divided chronologically into:
+The data was divided chronologically into:
 
-* **80% training data**
-* **20% testing data**
+* **80% Training Data**
+* **20% Testing Data**
 
-A chronological split is used because this is time-based data and future information should not be used to train the model.
+A chronological split was used because waste prediction is a time-dependent problem.
 
 ---
 
-## 🌳 Random Forest Model
+## 📈 Model Performance
 
-The main model used in the project is **Random Forest Regressor**.
+The Random Forest model produced the following test results:
 
-Configuration:
+| Metric   |     Result |
+| -------- | ---------: |
+| MAE      |  70,646.40 |
+| RMSE     | 100,710.88 |
+| R² Score |     0.9386 |
+
+### Model Comparison
+
+| Model             | R² Score |
+| ----------------- | -------: |
+| Linear Regression |   0.5439 |
+| Decision Tree     |   0.8879 |
+| Random Forest     |   0.9385 |
+
+The values above are based on the project's chronological test split.
+
+---
+
+## 🌲 Random Forest Configuration
+
+The Random Forest model was trained using:
 
 ```python
 RandomForestRegressor(
@@ -126,96 +153,101 @@ RandomForestRegressor(
 )
 ```
 
-The final model is trained using the available historical data for future prediction.
+The model uses multiple decision trees and combines their predictions to produce the final regression output.
 
 ---
 
-## 📈 Model Evaluation
+## 🔍 Feature Importance
 
-The Random Forest model is evaluated using:
+The trained Random Forest model identified the following feature importance values:
 
-### MAE
+| Feature                | Importance |
+| ---------------------- | ---------: |
+| Day of Week            |     0.8641 |
+| Previous Day Waste     |     0.0563 |
+| Previous 7-Day Average |     0.0332 |
+| Day                    |     0.0256 |
+| Month                  |     0.0209 |
 
-**Mean Absolute Error** measures the average absolute difference between actual and predicted waste.
-
-### MSE
-
-**Mean Squared Error** measures the average squared difference between actual and predicted values.
-
-### RMSE
-
-**Root Mean Squared Error** is the square root of MSE and represents prediction error in the same unit as the target variable.
-
-### R² Score
-
-**R² Score** indicates how much of the variation in waste generation is explained by the model.
+These values indicate how much each feature contributed to the model's predictions within this trained model.
 
 ---
 
-## 🔮 Prediction System
+## 🌐 Streamlit Application
 
-The prediction system accepts:
+The project includes an interactive Streamlit application.
 
-* Prediction date
-* Truck capacity
+The user can:
 
-The Random Forest model predicts the expected waste generation.
+1. Select a prediction date.
+2. Enter the available truck capacity.
+3. Generate the predicted waste quantity.
+4. View estimated collection trips.
+5. View historical waste-generation trends.
+6. View model performance information.
 
-The Streamlit application additionally considers:
+The application combines:
 
 * Random Forest prediction
-* Same day-of-week historical average
+* Same-day-of-week historical average
 * Recent 30-day average
 
-The final prediction is calculated using:
+to produce the displayed prediction.
+
+---
+
+## 📸 Application Screenshots
+
+### Main Dashboard
+
+![Main Dashboard](Screenshots/main_dashboard.png)
+
+### Prediction Result
+
+![Prediction Result](Screenshots/prediction_result.png)
+
+### Historical Waste Graph
+
+![Waste Generation Graph](Screenshots/waste_graph.png)
+
+---
+
+## 🔄 Project Workflow
 
 ```text
-Final Prediction =
-70% Random Forest Prediction
-+ 20% Same Day-of-Week Average
-+ 10% Recent 30-Day Average
+Historical Waste Dataset
+          ↓
+Data Cleaning
+          ↓
+Date Processing
+          ↓
+Daily Waste Aggregation
+          ↓
+Feature Engineering
+          ↓
+Train/Test Split
+          ↓
+Model Training
+          ↓
+Model Evaluation
+          ↓
+Random Forest Prediction
+          ↓
+Streamlit Application
+          ↓
+Predicted Waste Generation
+          ↓
+Estimated Collection Trips
 ```
 
 ---
 
-## 🚛 Collection Trip Estimation
-
-The system estimates the number of collection trips using:
-
-```text
-Required Trips = Ceiling(Predicted Waste / Truck Capacity)
-```
-
-For example, if the predicted waste is 1,000,000 units and the truck capacity is 400,000 units:
-
-```text
-Required Trips = ceil(1,000,000 / 400,000)
-               = 3 trips
-```
-
----
-
-## 💻 Streamlit Dashboard
-
-The Streamlit application provides:
-
-* 📅 Prediction date selection
-* 🚛 Truck capacity input
-* 🔮 Waste prediction
-* 📊 Required collection trips
-* 🤖 Model performance metrics
-* 📈 Historical waste generation chart
-* 📁 Dataset information
-* Prediction calculation details
-
----
-
-## 🚀 How to Run the Project
+## ▶️ How to Run the Project
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/waste-generation-prediction.git
+git clone https://github.com/Maithili0131/waste-generation-prediction.git
 ```
 
 ### 2. Open the project folder
@@ -224,7 +256,7 @@ git clone https://github.com/YOUR_USERNAME/waste-generation-prediction.git
 cd waste-generation-prediction
 ```
 
-### 3. Install the required libraries
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -240,55 +272,70 @@ The application will open in your browser.
 
 ---
 
-## ▶️ Run Individual Python Programs
+## 📌 Files Description
 
-### Train and evaluate the model
+### `app.py`
 
-```bash
-python train_model.py
-```
+Runs the Streamlit web application and provides the interactive prediction interface.
 
-### Compare regression models
+### `load_dataset.py`
 
-```bash
-python load_dataset.py
-```
+Loads, cleans, processes, and analyzes the dataset and compares the regression models.
 
-### Make a command-line prediction
+### `train_model.py`
 
-```bash
-python predict_waste.py
-```
+Trains the Random Forest model and evaluates its performance and feature importance.
 
----
+### `predict_waste.py`
 
-## 🔮 Future Scope
-
-The project can be extended by:
-
-* Using a dataset specific to a particular city or municipal corporation.
-* Including weather and seasonal information.
-* Including holidays and special events.
-* Adding waste-category information.
-* Using additional time-series forecasting techniques.
-* Developing a municipal corporation dashboard.
-* Adding automated alerts for high predicted waste generation.
-* Integrating real-time or regularly updated waste collection data.
+Provides a command-line based method for predicting waste generation and estimating collection trips.
 
 ---
 
 ## ⚠️ Limitations
 
-* The current dataset is historical and may not represent every locality.
-* Prediction quality depends on the quality and coverage of the historical data.
-* The current system does not use real-time bin-level sensor data.
-* Truck-trip estimation depends on the truck capacity entered by the user.
-* The prediction is intended as a data-driven estimate and not as a guaranteed future value.
+* Predictions depend on the quality and representativeness of historical data.
+* The dataset may not represent the waste-generation patterns of every city.
+* External factors such as festivals, weather, construction activity, or sudden events are not directly modeled.
+* The project is intended as a prediction and planning prototype rather than a complete municipal waste-management system.
 
 ---
 
-## 👩‍💻 Project
+## 🔮 Future Scope
 
-**Waste Generation Prediction System**
+Possible future improvements include:
 
-Developed as a machine learning project using Python, Scikit-learn and Streamlit.
+* Using a location-specific dataset for Navi Mumbai.
+* Adding weather and holiday information.
+* Testing advanced time-series models.
+* Adding real-time municipal data.
+* Creating location-wise waste prediction.
+* Developing a collection-route optimization module.
+* Adding an alert mechanism for predicted high-waste periods.
+* Deploying the application online.
+
+---
+
+## 👩‍💻 Author
+
+**Maithili Madhavi**
+
+B.E. Computer Engineering
+
+GitHub: [Maithili0131](https://github.com/Maithili0131)
+
+LinkedIn: [Maithili Madhavi](https://www.linkedin.com/in/maithilimadhavi321/)
+
+---
+
+## ⭐ Project Highlights
+
+* Machine Learning based waste prediction
+* Random Forest Regression
+* Feature engineering
+* Chronological train/test split
+* Model comparison
+* Streamlit interactive application
+* Collection-trip estimation
+* Data visualization
+* GitHub-ready project structure
